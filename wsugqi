@@ -1,0 +1,4 @@
+README.md
+.gitignore
+public\        （index.html + css + js 整个文件夹）
+server\        （index.js、database.js、package.json、pnpm-lock.yaml、seed.js）
