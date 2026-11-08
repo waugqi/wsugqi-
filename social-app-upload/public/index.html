@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌈 多彩圈 —— 我的社交平台</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 登录/注册视图 -->
+  <div id="auth-view" class="auth-wrap hidden">
+    <div class="auth-card">
+      <h1 class="logo">🌈 多彩圈</h1>
+      <p class="tagline">和朋友们一起分享快乐</p>
+      <div class="auth-tabs">
+        <button class="tab-btn active" data-tab="login">登录</button>
+        <button class="tab-btn" data-tab="register">注册</button>
+      </div>
+      <form id="login-form" class="auth-form">
+        <input type="text" id="login-username" placeholder="用户名" autocomplete="username" />
+        <input type="password" id="login-password" placeholder="密码" autocomplete="current-password" />
+        <button type="submit" class="btn primary full">登录</button>
+      </form>
+      <form id="register-form" class="auth-form hidden">
+        <input type="text" id="reg-username" placeholder="用户名（至少3位）" autocomplete="username" />
+        <input type="text" id="reg-nickname" placeholder="昵称" autocomplete="off" />
+        <input type="password" id="reg-password" placeholder="密码（至少6位）" autocomplete="new-password" />
+        <button type="submit" class="btn primary full">注册并登录</button>
+      </form>
+      <p id="auth-error" class="error-text"></p>
+    </div>
+  </div>
+
+  <!-- 主应用视图 -->
+  <div id="app-view" class="app hidden">
+    <!-- 侧边导航 -->
+    <aside class="sidebar">
+      <h1 class="logo">🌈 多彩圈</h1>
+      <nav class="nav">
+        <button class="nav-item active" data-view="feed"><span>🏠</span> 动态</button>
+        <button class="nav-item" data-view="friends"><span>👥</span> 好友</button>
+        <button class="nav-item" data-view="messages"><span>💬</span> 私聊</button>
+        <button class="nav-item" data-view="profile"><span>👤</span> 我的主页</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" id="logout-btn"><span>🚪</span> 退出登录</button>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main">
+      <!-- 动态流 -->
+      <section id="feed-view" class="view">
+        <div class="composer card">
+          <textarea id="post-content" placeholder="分享点什么吧…" rows="2"></textarea>
+          <div class="composer-actions">
+            <label class="image-label">
+              🖼️ <span id="image-file-name">添加图片</span>
+              <input type="file" id="post-image" accept="image/*" />
+            </label>
+            <button class="btn primary" id="post-submit">发布</button>
+          </div>
+        </div>
+        <div id="feed-list"></div>
+      </section>
+
+      <!-- 好友 -->
+      <section id="friends-view" class="view hidden">
+        <div class="friends-search">
+          <input type="text" id="friend-search" placeholder="搜索用户（用户名/昵称）..." />
+        </div>
+        <div id="search-results" class="user-grid hidden"></div>
+        <h2 class="section-title">我的好友</h2>
+        <div id="friends-list" class="user-grid"></div>
+        <h2 class="section-title">好友请求</h2>
+        <div id="friend-requests" class="user-grid"></div>
+      </section>
+
+      <!-- 私聊 -->
+      <section id="messages-view" class="view hidden">
+        <div class="messages-layout">
+          <div class="conversation-list" id="conversation-list"></div>
+          <div class="chat-panel" id="chat-panel">
+            <div class="chat-placeholder">👈 选择一位好友开始聊天</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 我的主页 -->
+      <section id="profile-view" class="view hidden">
+        <div class="profile-card card">
+          <div class="profile-cover" id="profile-cover"></div>
+          <div class="profile-body">
+            <div class="profile-top">
+              <div class="avatar xl" id="profile-avatar"></div>
+              <div class="profile-head">
+                <div>
+                  <h2 id="profile-nickname"></h2>
+                  <p class="muted" id="profile-username"></p>
+                </div>
+                <div class="profile-btns">
+                  <button class="btn outline" id="edit-profile-btn">✏️ 编辑资料</button>
+                  <button class="btn outline mobile-only" id="logout-mobile-btn">🚪 退出登录</button>
+                </div>
+              </div>
+            </div>
+            <p class="signature" id="profile-bio"></p>
+            <div class="stats-row">
+              <div class="stat"><b id="stat-posts">0</b><span>动态</span></div>
+              <div class="stat"><b id="stat-friends">0</b><span>好友</span></div>
+              <div class="stat"><b id="stat-joined">-</b><span>加入于</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="edit-profile-form" class="card hidden">
+          <h3>✏️ 编辑资料</h3>
+          <label>封面背景图</label>
+          <div class="cover-edit">
+            <div class="cover-preview" id="edit-cover-preview">未设置封面</div>
+            <div class="cover-edit-btns">
+              <label class="btn outline">
+                📷 上传封面
+                <input type="file" id="edit-cover-input" accept="image/*" />
+              </label>
+              <button class="btn outline" id="remove-cover-btn" type="button">🗑️ 移除封面</button>
+            </div>
+          </div>
+          <label>昵称</label>
+          <input type="text" id="edit-nickname" />
+          <label>头像（填 emoji 或图片 URL，留空用默认）</label>
+          <input type="text" id="edit-avatar" placeholder="如 😊 或 https://..." />
+          <label>个性签名</label>
+          <textarea id="edit-bio" rows="3" placeholder="写一句话介绍自己，展示在主页上 ✨"></textarea>
+          <label>主题色</label>
+          <input type="color" id="edit-color" />
+          <div class="form-actions">
+            <button class="btn primary" id="save-profile-btn">保存</button>
+            <button class="btn outline" id="cancel-profile-btn">取消</button>
+          </div>
+        </div>
+
+        <h2 class="section-title" id="profile-posts-title">我的动态</h2>
+        <div id="my-posts-list" class="posts-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 评论弹窗 -->
+  <div id="comment-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>评论</h3>
+        <button class="icon-btn" id="close-comment-modal">✕</button>
+      </div>
+      <div id="comment-post-preview"></div>
+      <div id="comment-list"></div>
+      <div class="comment-input">
+        <input type="text" id="comment-input" placeholder="写下你的评论..." />
+        <button class="btn primary" id="comment-submit">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

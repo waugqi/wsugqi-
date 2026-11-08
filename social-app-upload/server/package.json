@@ -1,0 +1,19 @@
+{
+  "name": "social-app-server",
+  "version": "1.0.0",
+  "description": "社交平台后端（Express + SQLite）",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "seed": "node seed.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0"
+  }
+}
